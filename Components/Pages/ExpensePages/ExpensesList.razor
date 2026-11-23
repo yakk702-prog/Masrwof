@@ -1,0 +1,75 @@
+﻿@page "/expensesList"
+@page "/"
+
+@inject IExpenseService ExpenseService
+@inject NavigationManager Navigation
+@inject IJSRuntime JS
+
+<div class="container mt-4" dir="rtl" style="text-align: right;">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="mb-0">سجل المصروفات</h2>
+        <button class="btn btn-primary" @onclick='() => Navigation.NavigateTo("/expense/add")'>إضافة مصروف</button>
+    </div>
+
+    <p class="mb-3"><strong>إجمالي المصروفات</strong> @ExpenseService.GetTotalExpenses().ToString("C2",CultureInfo.GetCultureInfo("ar-LY"))</p>
+
+    @if (!expenses.Any())
+    {
+        <p class="text-muted">لا توجد مصروفات مسجلة.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-sm text-center align-middle">
+                <thead>
+                    <tr>
+                        <th>التاريخ</th>
+                        <th>العنوان</th>
+                        <th>الفئة</th>
+                        <th>المبلغ</th>
+                        <th>الإجراءات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in expenses)
+                    {
+                        <tr>
+                            <td>@item.Date.ToString("yyyy-MM-dd")</td>
+                            <td>@item.Name</td>
+                            <td>@item.Category</td>
+                            <td>@item.Amount.ToString("C2",CultureInfo.GetCultureInfo("ar-LY"))</td>
+                            <td>                                
+                                <button class="btn btn-sm btn-outline-secondary" @onclick='() => Navigation.NavigateTo($"/expense/view/{item.Id}")'>عرض</button>
+                                <button class="btn btn-sm btn-outline-primary mx-1" @onclick='() => Navigation.NavigateTo($"/expense/edit/{item.Id}")'>تعديل</button>
+                                <button class="btn btn-sm btn-outline-danger" @onclick='() => DeleteExpense(item.Id)'>حذف</button>
+                            </td>   
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+@code {
+    private List<Expense> expenses = new();
+
+    protected override void OnInitialized()
+    {
+        LoadExpenses();
+    }
+    private void LoadExpenses()
+    {
+        expenses = ExpenseService.GetAllExpenses();
+    }
+    private async Task DeleteExpense(Guid id)
+    {
+        var confirmed = await JS.InvokeAsync<bool>("confirm", "هل أنت متأكد أنك تريد حذف هذا المصروف؟");
+        if (!confirmed)
+        {
+            return;
+        }
+        ExpenseService.DeleteExpense(id);
+        LoadExpenses();
+    }
+}

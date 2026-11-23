@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="Masrwof.csproj" />
+  <Project Path="Masrwof.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
 </Solution>

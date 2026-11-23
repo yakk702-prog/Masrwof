@@ -85,7 +85,7 @@ h1:focus {
     display: flex;
     position: sticky;
     top: 0;
-    height: env(safe_area-inset-top,0px);
+    height: env(safe-area-inset-top,0px);
     background-color: var(--maui-status-bar-safe-area-background,transparent);
     width: 100%;
     z-index: 1;

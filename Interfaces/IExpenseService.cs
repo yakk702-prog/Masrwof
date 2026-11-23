@@ -10,8 +10,8 @@ namespace Masrwof.Interfaces
         Expense GetExpenseById(Guid id);
         void UpdateExpense(Expense expense);
         List<Expense> GetAllExpenses();
-        void addExpense(Expense expense);
+        void AddExpense(Expense expense);
         void DeleteExpense(Guid id);
-        decimal getTotalExpenses();
+        decimal GetTotalExpenses();
     }
 }

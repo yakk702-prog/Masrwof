@@ -36,7 +36,7 @@ namespace Masrwof.Services
             _context.Expenses.Update(expense);
             _context.SaveChanges();
         }
-        public void addExpense(Expense expense)
+        public void AddExpense(Expense expense)
         {
             if (expense == null) return;
             _context.Expenses.Add(expense);
@@ -53,7 +53,7 @@ namespace Masrwof.Services
             }
         }    
 
-        public decimal getTotalExpenses()
+        public decimal GetTotalExpenses()
         {
             return _context.Expenses.Any()? _context.Expenses.Sum(e => e.Amount) : 0;
         }
