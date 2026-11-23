@@ -9,5 +9,6 @@ namespace Masrwof.Data
         {
         }
         public DbSet<Expense> Expenses { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }

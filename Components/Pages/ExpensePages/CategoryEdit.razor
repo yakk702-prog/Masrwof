@@ -1,0 +1,44 @@
+﻿@page "/category/edit/{id:guid}"
+@inject ICategoryService CategoryService
+@inject NavigationManager Navigation
+
+<div class="category-form-container">
+    <EditForm Model="@category" OnValidSubmit="HandleSubmit">
+        <DataAnnotationsValidator />
+        <div class="category-form-group">
+            <label class="category-form-label">اسم الفئة</label>
+            <input type="text" class="category-form-input" @bind-value="category.Name" required />
+        </div>
+        <div class="category-form-group">
+            <label class="category-form-label">المبلغ(د.ل)</label>
+            <input type="number" step="0.01" class="category-form-input" @bind-value="category.Amount" required />
+        </div>
+        <div class="category-form-group">
+            <label class="category-form-label">التاريخ</label>
+            <input type="date" class="category-form-input" @bind-value="category.Date" />
+        </div>
+        <div class="category-actions">
+            <button type="submit" class="category-btn category-btn-primary">حفظ</button>
+            <button type="button" class="category-btn" @onclick='GoBack'>إلغاء</button>
+        </div>
+    </EditForm>
+</div>
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+    private Category category = new();
+    protected override void OnInitialized()
+    {
+        category = CategoryService.GetCategoryById(Id) ?? new();
+        if (category.Id == Guid.Empty)
+        {
+            Navigation.NavigateTo("/categoriesList");
+        }
+    }
+    private void HandleSubmit()
+    {
+        CategoryService.UpdateCategory(category);
+        GoBack();
+    }
+    private void GoBack() => Navigation.NavigateTo("/categorieslist");
+}

@@ -1,0 +1,39 @@
+﻿@page "/category/view/{id:guid}"
+@inject ICategoryService CategoryService
+@inject NavigationManager Navigation
+<div class="category-form-container">
+    <div class="category-form-group">
+        <label class="category-form-label">الاسم</label>
+        <input type="text" class="category-form-input" value="@category.Name" disabled />
+    </div>
+    <div class="category-form-group">
+        <label class="category-form-label">المبلغ(د.ل)</label>
+        <input type="number" class="category-form-input" value="@category.Amount" disabled />
+    </div>
+    <div class="category-form-group">
+        <label class="category-form-label">التاريخ</label>
+        <input type="date" class="category-form-input" value="@category.Date.ToString("yyyy-MM-dd")" disabled />
+    </div>
+    <div class="category-summary">
+        <span>إجمالي القيمة:</span>
+        <strong>@category.Amount.ToString("C2", CultureInfo.GetCultureInfo("ar-LY"))</strong>
+    </div>
+    <div class="category-actions">
+        <button type="button" class="category-btn" @onclick="GoBack">رجوع</button>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private Category category = new();
+    protected override void OnInitialized()
+    {
+        category = CategoryService.GetCategoryById(Id) ?? new();
+        if (category.Id == Guid.Empty)
+        {
+            Navigation.NavigateTo("/categorieslist");
+        }
+    }
+    private void GoBack() => Navigation.NavigateTo("/categorieslist");
+}
