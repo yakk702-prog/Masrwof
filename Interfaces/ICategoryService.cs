@@ -12,6 +12,5 @@ namespace Masrwof.Interfaces
         List<Category> GetAllCategories();
         void AddCategory(Category category);
         void DeleteCategory(Guid id);
-        decimal GetTotalCategoryAmount();
     }
 }

@@ -9,14 +9,7 @@
             <label class="category-form-label">اسم الفئة</label>
             <input type="text" class="category-form-input" @bind-value="category.Name" required />
         </div>
-        <div class="category-form-group">
-            <label class="category-form-label">المبلغ(د.ل)</label>
-            <input type="number" step="0.01" class="category-form-input" @bind-value="category.Amount" required />
-        </div>
-        <div class="category-form-group">
-            <label class="category-form-label">التاريخ</label>
-            <input type="date" class="category-form-input" @bind-value="category.Date" />
-        </div>
+        
         <div class="category-actions">
             <button type="submit" class="category-btn category-btn-primary">حفظ</button>
             <button type="button" class="category-btn" @onclick='GoBack'>إلغاء</button>

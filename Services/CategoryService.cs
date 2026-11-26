@@ -50,10 +50,6 @@ namespace Masrwof.Services
                 _context.SaveChanges();
             }
         }
-
-        public decimal GetTotalCategoryAmount()
-        {
-            return _context.Categories.Any() ? _context.Categories.Sum(c => c.Amount) : 0;
-        }
+        
     }
 }

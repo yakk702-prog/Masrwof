@@ -10,8 +10,6 @@
         <button class="btn btn-primary" @onclick='() => Navigation.NavigateTo("/category/add")'>إضافة فئة</button>
     </div>
 
-    <p class="mb-3"><strong>إجمالي الفئات</strong> @CategoryService.GetTotalCategoryAmount().ToString("C2", CultureInfo.GetCultureInfo("ar-LY"))</p>
-
     @if (!categories.Any())
     {
         <p class="text-muted">لا توجد فئات مسجلة.</p>
@@ -22,9 +20,7 @@
             <table class="table table-striped table-sm text-center align-middle">
                 <thead>
                     <tr>
-                        <th>التاريخ</th>
                         <th>الفئة</th>
-                        <th>المبلغ</th>
                         <th>الإجراءات</th>
                     </tr>
                 </thead>
@@ -32,9 +28,7 @@
                     @foreach (var item in categories)
                     {
                         <tr>
-                            <td>@item.Date.ToString("yyyy-MM-dd")</td>
                             <td>@item.Name</td>
-                            <td>@item.Amount.ToString("C2", CultureInfo.GetCultureInfo("ar-LY"))</td>
                             <td>
                                 <button class="btn btn-sm btn-outline-secondary" @onclick='() => Navigation.NavigateTo($"/category/view/{item.Id}")'>عرض</button>
                                 <button class="btn btn-sm btn-outline-primary mx-1" @onclick='() => Navigation.NavigateTo($"/category/edit/{item.Id}")'>تعديل</button>
