@@ -26,7 +26,7 @@ namespace Masrwof
     		builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
 #endif
-            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "mymasrwof2.db");
+            string dbPath = Path.Combine(FileSystem.AppDataDirectory, "MyMasrwof3.db");
 
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlite($"Data Source={dbPath}"),
@@ -38,7 +38,7 @@ namespace Masrwof
             using (var scope = app.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                context.Database.EnsureCreated();
+                context.Database.Migrate();
             }
 
             return app;
