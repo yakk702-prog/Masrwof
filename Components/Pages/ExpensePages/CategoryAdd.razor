@@ -16,11 +16,26 @@
     </EditForm>
 </div>
 @code {
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
     private Category category = new();
     private void HandleSubmit()
     {
         CategoryService.AddCategory(category);
+        if (!string.IsNullOrWhiteSpace(ReturnUrl))
+        {
+            var encodedCategory = Uri.EscapeDataString(category.Name??string.Empty);
+            Navigation.NavigateTo($"{ReturnUrl}?selectedCategory={encodedCategory}");
+            return;
+        }
         GoBack();
     }
-    private void GoBack() => Navigation.NavigateTo("/categorieslist");
+    private void GoBack() {
+        if(!string.IsNullOrWhiteSpace(ReturnUrl))
+        {
+            Navigation.NavigateTo(ReturnUrl);
+            return;
+        }
+        Navigation.NavigateTo("/categorieslist"); 
+    }
 }

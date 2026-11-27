@@ -1,5 +1,6 @@
 ﻿@page "/expense/add"
 @inject IExpenseService ExpenseService
+@inject ICategoryService CategoryService
 @inject NavigationManager Navigation
 
 <div class="expense-form-container">
@@ -15,13 +16,12 @@
         </div>
         <div class="expense-form-group"> 
             <label class="expense-form-label">الفئة</label>
-            <select class="expense-form-input" @bind="expense.Category">
-                <option value="طعام">طعام</option>
-                <option value="مواصلات">مواصلات</option>
-                <option value="فواتير">فواتير</option>
-                <option value="ترفيه">ترفيه</option>
-                <option value="صحة">صحة وعلاج</option>
-                <option value="أخرى">أخرى</option>
+            <select class="expense-form-input" value="@expense.Category" @onchange="OnCategoryChange">
+                @foreach (var category in categories)
+                {
+                    <option value="@category.Name">@category.Name</option>
+                }
+                <option value="Add_New">أخرى</option>
             </select>
         </div>
         <div class="expense-form-group">
@@ -35,7 +35,33 @@
     </EditForm>
 </div>
 @code {
-    private Expense expense = new(){Date = DateTime.Now,Category = "طعام"};
+    [SupplyParameterFromQuery]
+    public string? SelectedCategory { get; set; }
+    private Expense expense = new(){Date = DateTime.Now};
+    private List<Category> categories = new();
+    protected override void OnInitialized()
+    {
+        categories = CategoryService.GetAllCategories();
+        if (!string.IsNullOrWhiteSpace(SelectedCategory))
+        {
+            expense.Category = SelectedCategory;
+        }
+        else if (categories.Any())
+        {
+            expense.Category = categories.First().Name;
+        }
+    }
+    private void OnCategoryChange(ChangeEventArgs e)
+    {
+        var selectedCategory = e.Value?.ToString()??string.Empty;
+        if (selectedCategory=="Add_New")
+        {
+            var returnUrl = Uri.EscapeDataString("/expense/add");  
+            Navigation.NavigateTo($"/category/add?returnUrl={returnUrl}");
+            return;
+        }
+        expense.Category = selectedCategory;
+    }
     private void HandleSubmit()
     {
         ExpenseService.AddExpense(expense);
